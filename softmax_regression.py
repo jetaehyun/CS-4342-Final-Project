@@ -9,7 +9,7 @@ def softmaxRegression (trainingImages, trainingLabels, testingImages, testingLab
 
     w = 0.01 * np.random.rand(trainingImages.shape[0], trainingLabels.shape[0])
     rnd = int(trainingImages.shape[1] / batchSize)
-    numEpoch = 10
+    numEpoch = 50
 
     # fCE = []
     for epoch in range(numEpoch):
@@ -85,10 +85,18 @@ def transImage(images, shuffle):
 
     return images[shuffle].T
 
-if __name__ == "__main__":
 
-    train_d = importCSV('train.csv')
-    test_d = importCSV('Dig-MNIST.csv')
+def plot_weights(W):
+    W = W.T
+    # plot the 10 classes
+    for i in range(10):
+        plt.subplot(1, 10, i+1)
+        plt.imshow(np.reshape(W[i][:-1], (28, 28)), cmap='gray')
+        plt.axis('off')
+    plt.show()
+
+
+def run_softmax_reg(train_d, test_d, epsilon, batchSize):
 
     trainingImages = getData(train_d)
     trainingLabels = getLabels(train_d)
@@ -108,11 +116,6 @@ if __name__ == "__main__":
     testingImages = transImage(testingImages, [])
     testingLabels = one_hot_label(testingLabels, [])
 
-    W = softmaxRegression(trainingImages, trainingLabels, testingImages, testingLabels, epsilon=0.1, batchSize=500).T
+    W = softmaxRegression(trainingImages, trainingLabels, testingImages, testingLabels, epsilon, batchSize)
 
-    # plot the 10 classes
-    for i in range(10):
-        plt.subplot(1, 10, i+1)
-        plt.imshow(np.reshape(W[i][:-1], (28, 28)), cmap='gray')
-        plt.axis('off')
-    plt.show()
+    return W

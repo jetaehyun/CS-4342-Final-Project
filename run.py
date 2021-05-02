@@ -6,4 +6,6 @@ if __name__ == '__main__':
     test_d = importCSV('Dig-MNIST.csv')
 
     # run_softmax_reg(train_d, test_d, 0.1, 500)
-    run_random_forest(train_d, test_d)
+    # run_random_forest(train_d, test_d)
+    params = {'n_estimators': [50, 200], 'min_samples_leaf': [1, 2], 'min_samples_split': [2, 3]}
+    tune_random_forest(train_d, test_d, params)

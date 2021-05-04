@@ -136,3 +136,6 @@ test.csv
 train.csv
 Dig-MNIST.csv
 submission.csv
+
+# brain
+.idea/**

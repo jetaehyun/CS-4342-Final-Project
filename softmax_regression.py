@@ -5,7 +5,7 @@ import pandas
 import matplotlib.pyplot as plt
 
 
-def softmaxRegression (trainingImages, trainingLabels, testingImages, testingLabels, epsilon = None, batchSize = None):
+def softmaxRegression (trainingImages, trainingLabels, testingImages, testingLabels, epsilon=None, batchSize=None):
 
     w = 0.01 * np.random.rand(trainingImages.shape[0], trainingLabels.shape[0])
     rnd = int(trainingImages.shape[1] / batchSize)

@@ -27,7 +27,7 @@ def run_random_forest(train_d, test_d, n_estimators=100):
     Xte = getData(test_d)
     yte = getLabels(test_d)
 
-    Xtr, Xte_ex, ytr, yte_ex = train_test_split(Xtr, ytr, test_size=0.5, random_state=42)
+    Xtr, Xte_ex, ytr, yte_ex = train_test_split(Xtr, ytr, test_size=0.2, random_state=42)
 
 
     # n_estimators is number of trees

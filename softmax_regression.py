@@ -117,5 +117,7 @@ def run_softmax_reg(train_d, test_d, epsilon, batchSize):
     testingLabels = one_hot_label(testingLabels, [])
 
     W = softmaxRegression(trainingImages, trainingLabels, testingImages, testingLabels, epsilon, batchSize)
+    yhat = softmax(testingImages, W)
+    yhat = np.argmax(yhat, axis=0)
 
     return W

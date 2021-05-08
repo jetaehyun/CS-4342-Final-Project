@@ -55,7 +55,7 @@ def tune_MLP(train_d, epochs, batch_size, learning_rate, momentum, activation, d
     print(f'best params: {best_params}')
 
 # best params: {'activation': 'relu', 'batch_size': 50, 'dropout_rate': 0.2, 'learning_rate': 0.1, 'momentum': 0.8, 'neurons': 512}
-def run_MLP(train_d, test_d, activation, batch_size, dropout_rate, learning_rate, momentum, neurons, epochs, num_samples=60000):
+def run_MLP(train_d, test_d, activation='relu', batch_size=50, dropout_rate=0.2, learning_rate=0.1, momentum=0.8, neurons=512, epochs=50, num_samples=60000):
     Xtr = getData(train_d)[0:num_samples:]
     ytr = getLabels(train_d)[0:num_samples:]
     Xte = getData(test_d)

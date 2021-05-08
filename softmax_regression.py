@@ -1,14 +1,14 @@
 from parser import *
-
+from sklearn.metrics import classification_report
 import numpy as np
 import pandas
 import matplotlib.pyplot as plt
 
 
-def softmaxRegression (trainingImages, trainingLabels, testingImages, testingLabels, epsilon=None, batchSize=None):
+def softmaxRegression (Xtr, ytr, Xte, yte, epsilon=None, batchSize=None):
 
-    w = 0.01 * np.random.rand(trainingImages.shape[0], trainingLabels.shape[0])
-    rnd = int(trainingImages.shape[1] / batchSize)
+    w = 0.01 * np.random.rand(Xtr.shape[0], ytr.shape[0])
+    rnd = int(Xtr.shape[1] / batchSize)
     numEpoch = 50
 
     # fCE = []
@@ -18,7 +18,7 @@ def softmaxRegression (trainingImages, trainingLabels, testingImages, testingLab
             start = i * batchSize
             end = start + batchSize
 
-            x, y = trainingImages[:,start:end], trainingLabels[:,start:end]
+            x, y = Xtr[:,start:end], ytr[:,start:end]
             gradf = gradient(x, y, w, batchSize)
 
             w -= epsilon * gradf
@@ -27,9 +27,9 @@ def softmaxRegression (trainingImages, trainingLabels, testingImages, testingLab
             # if epoch == numEpoch - 1 and i > rnd - 21:
                 # print(CELoss(x, y, w))
 
-        # fCE.append(CELoss(trainingImages, trainingLabels, w))
+        # fCE.append(CELoss(Xtr, ytr, w))
 
-    print(f'test set: CE loss = {CELoss(testingImages, testingLabels, w)}, PC = {accuracy(testingImages, testingLabels, w)*100}%')
+    print(f'test set: CE loss = {CELoss(Xte, yte, w)}, PC = {accuracy(Xte, yte, w)*100}%')
 
     # plotGraph([i + 1 for i in range(numEpoch)], fCE, "epoch", "fCE")
 
@@ -96,28 +96,31 @@ def plot_weights(W):
     plt.show()
 
 
-def run_softmax_reg(train_d, test_d, epsilon, batchSize):
+def run_softmax_reg(train_d, test_d, epsilon, batchSize, num_samples=60000):
 
-    trainingImages = getData(train_d)
-    trainingLabels = getLabels(train_d)
-    testingImages = getData(test_d)
-    testingLabels = getLabels(test_d)
+    Xtr = getData(train_d)[0:num_samples:]
+    ytr = getLabels(train_d)[0:num_samples:]
+    Xte = getData(test_d)
+    yte = getLabels(test_d)
 
-    trainingImages = np.divide(trainingImages, 255.0)
-    testingImages = np.divide(testingImages, 255.0)
+    Xtr = np.divide(Xtr, 255.0)
+    Xte = np.divide(Xte, 255.0)
 
     # shuffle permuations
-    shuffler_tr = np.random.permutation(len(trainingImages))
+    shuffler_tr = np.random.permutation(len(Xtr))
 
     # append bias and create one hot vector for training and testing images
-    trainingImages = transImage(trainingImages, shuffler_tr)
-    trainingLabels = one_hot_label(trainingLabels, shuffler_tr)
+    Xtr = transImage(Xtr, shuffler_tr)
+    ytr = one_hot_label(ytr, shuffler_tr)
 
-    testingImages = transImage(testingImages, [])
-    testingLabels = one_hot_label(testingLabels, [])
+    Xte = transImage(Xte, [])
+    yte = one_hot_label(yte, [])
 
-    W = softmaxRegression(trainingImages, trainingLabels, testingImages, testingLabels, epsilon, batchSize)
-    yhat = softmax(testingImages, W)
+    W = softmaxRegression(Xtr, ytr, Xte, yte, epsilon, batchSize)
+    yhat = softmax(Xte, W)
     yhat = np.argmax(yhat, axis=0)
+    yte = np.argmax(yte, axis=0)
+    print(classification_report(yte, yhat))
+
 
     return W

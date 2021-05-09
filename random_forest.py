@@ -33,7 +33,6 @@ def tune_random_forest(train_d, test_d, params):
 
 
 def run_random_forest(train_d, test_d, n_estimators=200, min_samples_leaf=1, min_samples_split=2, num_samples=60000):
-    # t = np.random.choice(60000, size=60000)
     Xtr = getData(train_d)[0:num_samples:]
     ytr = getLabels(train_d)[0:num_samples:]
     Xte = getData(test_d)

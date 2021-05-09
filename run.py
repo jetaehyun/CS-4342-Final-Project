@@ -12,6 +12,7 @@ if __name__ == '__main__':
 
 
 
+    # random_forest
     # params = {'n_estimators': [50, 100, 200], 'min_samples_leaf': [1, 2], 'min_samples_split': [2, 3]}
     # tune_random_forest(train_d, test_d, params)
     # run_random_forest(train_d, test_d)
@@ -27,4 +28,4 @@ if __name__ == '__main__':
     # learn_rate = [0.001, 0.01, 0.1]
     # tune_MLP(train_d, epochs=epochs,batch_size=batch_size,learning_rate=learn_rate, momentum=momentum, activation=activation, dropout_rate=dropout_rate, neurons=neurons)
     # best params: {'activation': 'relu', 'batch_size': 50, 'dropout_rate': 0.2, 'learning_rate': 0.1, 'momentum': 0.8, 'neurons': 512}
-    # run_MLP(train_d, test_d)
+    run_MLP(train_d, test_d)

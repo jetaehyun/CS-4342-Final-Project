@@ -7,7 +7,7 @@ from keras.layers import Dense, Dropout
 from keras.optimizers import SGD
 from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import GridSearchCV
-
+import matplotlib.pyplot as plt
 
 def one_hot_label(label):
     shape = (label.size, label.max()+1)
@@ -58,6 +58,16 @@ def tune_MLP(train_d, epochs, batch_size, learning_rate, momentum, activation, d
 def run_MLP(train_d, test_d, activation='relu', batch_size=50, dropout_rate=0.2, learning_rate=0.1, momentum=0.8, neurons=512, epochs=50, num_samples=60000):
     Xtr = getData(train_d)[0:num_samples:]
     ytr = getLabels(train_d)[0:num_samples:]
+
+    data_to_augment = getDataAtLabel(train_d, 6)
+    Xtr, ytr = dataAugmentationFlip(Xtr, data_to_augment, ytr, 6)
+    data_to_augment = getDataAtLabel(train_d, 5)
+    print(data_to_augment.shape)
+    Xtr, ytr = dataAugmentationFlip(Xtr, data_to_augment, ytr, 5)
+    # shuffler = np.random.permutation(Xtr.shape[0])
+    # Xtr = Xtr[shuffler]
+    # ytr = ytr[shuffler]
+
     Xte = getData(test_d)
     yte = getLabels(test_d)
 

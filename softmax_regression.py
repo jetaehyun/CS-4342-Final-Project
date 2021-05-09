@@ -122,5 +122,7 @@ def run_softmax_reg(train_d, test_d, epsilon, batchSize, num_samples=60000):
     yte = np.argmax(yte, axis=0)
     print(classification_report(yte, yhat))
 
+    plot_weights(W)
+
 
     return W

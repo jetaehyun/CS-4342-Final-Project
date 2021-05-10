@@ -1,6 +1,7 @@
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from tensorflow.keras import datasets, layers, models, losses, Model
+import numpy as np
 from parser import *
 
 # Within this load_dataset I also am reshaping the data to suit the GoogLeNet CNN
@@ -15,19 +16,22 @@ def load_dataset(train_d, test_d):
     Xte = getData(test_d)
     yte = getLabels(test_d)
 
-    # reshape dataset to suit the googLeNet model
-    trainX = tf.pad(Xtr, [[0, 0], [2, 2], [2, 2]]) / 255
-    testX = tf.pad(Xte, [[0, 0], [2, 2], [2, 2]]) / 255
-    trainX = tf.expand_dims(trainX, axis=3, name=None)
-    testX = tf.expand_dims(trainX, axis=3, name=None)
-    trainX = tf.repeat(trainX, 3, axis=3)
-    testX = tf.repeat(testX, 3, axis=3)
-    xVal = trainX[-2000:, :, :, :]
-    yVal = yte[-2000:]
-    trainX = trainX[:-2000, :, :, :]
-    trainY = yte[:-2000]
+    Xtr = np.reshape(Xtr, (Xtr.shape[0], 28, 28))
+    Xte = np.reshape(Xte, (Xte.shape[0], 28, 28))
 
-    return trainX, trainY, testX, xVal, yVal
+    # reshape dataset to suit the googLeNet model
+    Xtr = tf.pad(Xtr, [[0, 0], [2, 2], [2, 2]]) / 255
+    Xte = tf.pad(Xte, [[0, 0], [2, 2], [2, 2]]) / 255
+    Xtr = tf.expand_dims(Xtr, axis=3, name=None)
+    Xte = tf.expand_dims(Xte, axis=3, name=None)
+    Xtr = tf.repeat(Xtr, 3, axis=3)
+    Xte = tf.repeat(Xte, 3, axis=3)
+    xVal = Xtr[-2000:, :, :, :]
+    yVal = ytr[-2000:]
+    Xtr = Xtr[:-2000, :, :, :]
+    ytr = ytr[:-2000]
+
+    return Xtr, ytr, xVal, yVal
 
 def inception(x, filters_1x1, filters_3x3_reduce, filters_3x3, filters_5x5_reduce, filters_5x5, filters_pool):
     path1 = layers.Conv2D(filters_1x1, (1, 1), padding='same',    activation='relu')(x)
@@ -39,9 +43,9 @@ def inception(x, filters_1x1, filters_3x3_reduce, filters_3x3, filters_5x5_reduc
     path4 = layers.Conv2D(filters_pool, (1, 1), padding='same', activation='relu')(path4)
     return tf.concat([path1, path2, path3, path4], axis=3)
 
-def initializeModel():
+def initializeModel(Xtr):
     inp = layers.Input(shape=(32, 32, 3))
-    input_tensor = layers.experimental.preprocessing.Resizing(224, 224, interpolation="bilinear", input_shape=x_train.shape[1:])(inp)
+    input_tensor = layers.experimental.preprocessing.Resizing(224, 224, interpolation="bilinear", input_shape=Xtr.shape[1:])(inp)
 
     x = layers.Conv2D(64, 7, strides=2, padding='same', activation='relu')(input_tensor)
     x = layers.MaxPooling2D(3, strides=2)(x)
@@ -95,7 +99,7 @@ def trainModel(train_x, train_y, x_val, y_val, model):
     history = model.fit(train_x, [train_y, train_y, train_y], validation_data=(x_val, [y_val, y_val, y_val]), batch_size=64, epochs=40)
     print(history['accuracy'])
 
-def runGNet(train_d, test_d):
-    train_x, train_y, test_x, test_y = load_dataset(train_d, test_d)
-    model = initializeModel()
-    trainModel(train_x, train_y, test_x, test_y, model)
+def run_GNet(train_d, test_d):
+    Xtr, ytr, Xte, yte = load_dataset(train_d, test_d)
+    model = initializeModel(Xtr)
+    trainModel(Xtr, ytr, Xte, yte, model)

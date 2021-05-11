@@ -37,6 +37,17 @@ def dataAugmentationTranslation(X1, X2, y1, label, shift=-2):
     return x_new, y_new
 
 
+def dataAugmentationColor(X, idx, colorVal=80):
+
+    for i in idx:
+        ptr = X[i]
+        ptr[ptr > 0] = colorVal
+        X[i] = ptr
+
+
+    return X
+
+
 def showTwoImages(img1, img2):
     f, axarr = plt.subplots(1,2)
     axarr[0].imshow(img1)

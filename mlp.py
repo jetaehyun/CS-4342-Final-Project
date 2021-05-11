@@ -61,14 +61,16 @@ def run_MLP(train_d, test_d, activation='relu', batch_size=50, dropout_rate=0.2,
     Xtr = getData(train_d)[0:num_samples:]
     ytr = getLabels(train_d)[0:num_samples:]
 
+    idx = getIndicesOfLabel(train_d, 5)
+    Xtr = dataAugmentationColor(Xtr, idx, 128)
+
     data_to_augment = getDataAtLabel(train_d, 6)
     Xtr, ytr = dataAugmentationRotate(Xtr, data_to_augment, ytr, 6)
     data_to_augment = getDataAtLabel(train_d, 5)
     Xtr, ytr = dataAugmentationRotate(Xtr, data_to_augment, ytr, 5)
-    # data_to_augment = getDataAtLabel(train_d, 5)
-    # Xtr, ytr = dataAugmentationTranslation(Xtr, data_to_augment, ytr, 5)
+    data_to_augment = getDataAtLabel(train_d, 5)
+    Xtr, ytr = dataAugmentationTranslation(Xtr, data_to_augment, ytr, 5)
 
-    return
 
     Xte = getData(test_d)
     yte = getLabels(test_d)

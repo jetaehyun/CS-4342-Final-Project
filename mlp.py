@@ -60,13 +60,10 @@ def run_MLP(train_d, test_d, activation='relu', batch_size=50, dropout_rate=0.2,
     ytr = getLabels(train_d)[0:num_samples:]
 
     data_to_augment = getDataAtLabel(train_d, 6)
-    Xtr, ytr = dataAugmentationFlip(Xtr, data_to_augment, ytr, 6)
+    Xtr, ytr = dataAugmentationRotate(Xtr, data_to_augment, ytr, 6)
     data_to_augment = getDataAtLabel(train_d, 5)
-    print(data_to_augment.shape)
-    Xtr, ytr = dataAugmentationFlip(Xtr, data_to_augment, ytr, 5)
-    # shuffler = np.random.permutation(Xtr.shape[0])
-    # Xtr = Xtr[shuffler]
-    # ytr = ytr[shuffler]
+    Xtr, ytr = dataAugmentationRotate(Xtr, data_to_augment, ytr, 5)
+
 
     Xte = getData(test_d)
     yte = getLabels(test_d)

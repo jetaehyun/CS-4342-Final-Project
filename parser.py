@@ -1,6 +1,6 @@
 import pandas
 import numpy as np
-
+from scipy import ndimage
 
 def importCSV(file_name):
     return pandas.read_csv(file_name)
@@ -22,11 +22,12 @@ def getDataAtLabel(data_frame, label):
     return desired_rows[:,1:]
 
 
-def dataAugmentationFlip(X1, X2, y1, label):
+def dataAugmentationRotate(X1, X2, y1, label,degree=20):
     X2 = np.reshape(X2, (X2.shape[0], 28, 28))
 
     for i in range(X2.shape[0]):
-        X2[i] = np.fliplr(X2[i])
+        X2[i] = ndimage.rotate(X2[i], degree, reshape=False)
+
 
     X2 = np.reshape(X2, (X2.shape[0], 784))
     x_new = np.vstack((X1, X2))

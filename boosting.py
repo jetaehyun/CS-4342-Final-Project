@@ -12,7 +12,7 @@ def setupData(train_d, test_d):
     return train_x, test_x, train_y, test_y
 
 def runModel(train_x, train_y, test_x, test_y):
-    clf = GradientBoostingClassifier(n_estimators=1000, learning_rate=0.1, max_depth=1, random_state=0).fit(train_x, train_y)
+    clf = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, max_depth=1, random_state=0).fit(train_x, train_y)
     gradOutput = clf.predict(test_x)
     print(accuracy_score(test_y, gradOutput))
 

@@ -1,4 +1,6 @@
 from parser import *
+from data_augmentation import *
+
 import numpy as np
 from keras.models import Sequential
 from sklearn.model_selection import train_test_split
@@ -63,7 +65,10 @@ def run_MLP(train_d, test_d, activation='relu', batch_size=50, dropout_rate=0.2,
     Xtr, ytr = dataAugmentationRotate(Xtr, data_to_augment, ytr, 6)
     data_to_augment = getDataAtLabel(train_d, 5)
     Xtr, ytr = dataAugmentationRotate(Xtr, data_to_augment, ytr, 5)
+    # data_to_augment = getDataAtLabel(train_d, 5)
+    # Xtr, ytr = dataAugmentationTranslation(Xtr, data_to_augment, ytr, 5)
 
+    return
 
     Xte = getData(test_d)
     yte = getLabels(test_d)

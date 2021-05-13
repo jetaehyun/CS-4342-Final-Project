@@ -9,12 +9,31 @@ from keras.layers import MaxPooling2D
 from keras.layers import Dense
 from keras.layers import Flatten
 from parser import *
+from data_augmentation import *
 
 # load train and test dataset
-def load_dataset(train_d, test_d):
-    # load dataset
-    Xtr = getData(train_d)
-    ytr = getLabels(train_d)
+def load_dataset(train_d, test_d, sampleSize=60000):
+
+    # load dataset -> Not Augmented
+    # Xtr = getData(train_d)
+    # ytr = getLabels(train_d)
+    # Xte = getData(test_d)
+    # yte = getLabels(test_d)
+
+    # Load Dataset -> Augmented
+    Xtr = getData(train_d)[0:sampleSize:]
+    ytr = getLabels(train_d)[0:sampleSize:]
+
+    idx = getIndicesOfLabel(train_d, 5)
+    Xtr = dataAugmentationColor(Xtr, idx, 128)
+
+    data_to_augment = getDataAtLabel(train_d, 6)
+    Xtr, ytr = dataAugmentationRotate(Xtr, data_to_augment, ytr, 6)
+    data_to_augment = getDataAtLabel(train_d, 5)
+    Xtr, ytr = dataAugmentationRotate(Xtr, data_to_augment, ytr, 5)
+    data_to_augment = getDataAtLabel(train_d, 5)
+    Xtr, ytr = dataAugmentationTranslation(Xtr, data_to_augment, ytr, 5)
+
     Xte = getData(test_d)
     yte = getLabels(test_d)
 

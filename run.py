@@ -1,7 +1,6 @@
 from softmax_regression import *
 from random_forest import *
 from cnn import *
-from boosting import *
 from google_net import *
 from mlp import *
 import os
@@ -22,13 +21,8 @@ if __name__ == '__main__':
     # tune_random_forest(train_d, test_d, params)
     # run_random_forest(train_d, test_d)
 
-    # Model boosting
-    # runBoosting(train_d, test_d)
-
     # GoogLeNet
     # run_GNet(train_d, test_d)
-
-
 
     # mlp
     # batch_size = [50, 100, 500]
@@ -40,4 +34,4 @@ if __name__ == '__main__':
     # learn_rate = [0.001, 0.01, 0.1]
     # tune_MLP(train_d, epochs=epochs,batch_size=batch_size,learning_rate=learn_rate, momentum=momentum, activation=activation, dropout_rate=dropout_rate, neurons=neurons)
     # best params: {'activation': 'relu', 'batch_size': 50, 'dropout_rate': 0.2, 'learning_rate': 0.1, 'momentum': 0.8, 'neurons': 512}
-    run_MLP(train_d, test_d)
+    # run_MLP(train_d, test_d)

@@ -1,18 +1,34 @@
 import tensorflow as tf
-import matplotlib.pyplot as plt
-from tensorflow.keras import datasets, layers, models, losses, Model
-import numpy as np
+from tensorflow.keras import layers, losses, Model
 from parser import *
+from data_augmentation import *
 
 # Within this load_dataset I also am reshaping the data to suit the GoogLeNet CNN
 # The images need to be reshaped to 224x224x3 to suit the LeNet format
 # See article below for reference
 # https://ai.plainenglish.io/googlenet-inceptionv1-with-tensorflow-9e7f3a161e87
 
-def load_dataset(train_d, test_d):
-    # load dataset
-    Xtr = getData(train_d)
-    ytr = getLabels(train_d)
+def load_dataset(train_d, test_d, sampleSize=60000):
+    # load dataset -> Not Augmented
+    # Xtr = getData(train_d)[0:sampleSize:]
+    # ytr = getLabels(train_d)[0:sampleSize:]
+    # Xte = getData(test_d)[0:sampleSize:]
+    # yte = getLabels(test_d)[0:sampleSize:]
+
+    # Load Data -> Augmented
+    Xtr = getData(train_d)[0:sampleSize:]
+    ytr = getLabels(train_d)[0:sampleSize:]
+
+    idx = getIndicesOfLabel(train_d, 5)
+    Xtr = dataAugmentationColor(Xtr, idx, 128)
+    #
+    data_to_augment = getDataAtLabel(train_d, 6)
+    Xtr, ytr = dataAugmentationRotate(Xtr, data_to_augment, ytr, 6)
+    data_to_augment = getDataAtLabel(train_d, 5)
+    Xtr, ytr = dataAugmentationRotate(Xtr, data_to_augment, ytr, 5)
+    data_to_augment = getDataAtLabel(train_d, 5)
+    Xtr, ytr = dataAugmentationTranslation(Xtr, data_to_augment, ytr, 5)
+
     Xte = getData(test_d)
     yte = getLabels(test_d)
 
@@ -96,8 +112,8 @@ def initializeModel(Xtr):
     return model
 
 def trainModel(train_x, train_y, x_val, y_val, model):
-    history = model.fit(train_x, [train_y, train_y, train_y], validation_data=(x_val, [y_val, y_val, y_val]), batch_size=64, epochs=40)
-    print(history['accuracy'])
+    history = model.fit(train_x, [train_y, train_y, train_y], validation_data=(x_val, [y_val, y_val, y_val]), batch_size=64, epochs=1)
+    #print(history['accuracy'])
 
 def run_GNet(train_d, test_d):
     Xtr, ytr, Xte, yte = load_dataset(train_d, test_d)

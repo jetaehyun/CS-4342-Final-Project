@@ -71,7 +71,6 @@ def run_MLP(train_d, test_d, activation='relu', batch_size=50, dropout_rate=0.2,
     data_to_augment = getDataAtLabel(train_d, 5)
     Xtr, ytr = dataAugmentationTranslation(Xtr, data_to_augment, ytr, 5)
 
-
     Xte = getData(test_d)
     yte = getLabels(test_d)
 
